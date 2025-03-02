@@ -444,6 +444,11 @@ class EvalCkptDriver(object):
     del features, is_training
     raise ValueError('Must be implemented by subclasses.')
 
+  def build_model_only(self, features, is_training):
+    """Build model with input features."""
+    del features, is_training
+    raise ValueError('Must be implemented by subclasses.')
+
   def get_preprocess_fn(self):
     raise ValueError('Must be implemented by subclsses.')
 
