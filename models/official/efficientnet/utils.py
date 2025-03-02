@@ -120,9 +120,9 @@ class TpuBatchNormalization(tf.keras.layers.BatchNormalization):
   """Cross replica batch normalization."""
 
   def __init__(self, fused=False, **kwargs):
-    if fused in (True, None):
-      raise ValueError('TpuBatchNormalization does not support fused=True.')
-    super(TpuBatchNormalization, self).__init__(fused=fused, **kwargs)
+    #if fused in (True, None):
+    #  raise ValueError('TpuBatchNormalization does not support fused=True.')
+    super(TpuBatchNormalization, self).__init__(fused=False, **kwargs)
 
   def _cross_replica_average(self, t, num_shards_per_group):
     """Calculates the average value of input tensor across TPU replicas."""
