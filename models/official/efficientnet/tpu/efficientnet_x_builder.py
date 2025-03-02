@@ -251,3 +251,29 @@ def build_model_base(images, model_name, training, override_params=None):
 
   features = tf.identity(features, 'features')
   return features, model.endpoints
+
+def build_only_model_base(images, model_name, training, override_params=None):
+  """Create a base feature network and return the features before pooling.
+
+  Args:
+    images: input images tensor.
+    model_name: string, the predefined model name.
+    training: boolean, whether the model is constructed for training.
+    override_params: A dictionary of params for overriding. Fields must exist in
+      efficientnet_model.GlobalParams.
+
+  Returns:
+    features: base features before pooling.
+    endpoints: the endpoints for each layer.
+
+  Raises:
+    When model_name specified an undefined model, raises NotImplementedError.
+    When override_params has invalid fields, raises ValueError.
+  """
+  assert isinstance(images, tf.Tensor)
+  blocks_args, global_params = get_model_params(model_name, override_params)
+
+  with tf.variable_scope(model_name):
+    model = efficientnet_model.Model(blocks_args, global_params)
+    return model
+
