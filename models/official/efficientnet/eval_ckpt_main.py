@@ -57,6 +57,21 @@ flags.DEFINE_integer('num_images', 5000,
 
 class EvalCkptDriver(utils.EvalCkptDriver):
   """A driver for running eval inference."""
+  def build_model_only(self, features, is_training):
+    """Build model with input features."""
+    tf.logging.info(self.model_name)
+    model_builder = model_builder_factory.get_model_builder(self.model_name)
+
+    if self.advprop_preprocessing:
+      # AdvProp uses Inception preprocessing.
+      features = features * 2.0 / 255 - 1.0
+    else:
+      features -= tf.constant(
+          model_builder.MEAN_RGB, shape=[1, 1, 3], dtype=features.dtype)
+      features /= tf.constant(
+          model_builder.STDDEV_RGB, shape=[1, 1, 3], dtype=features.dtype)
+    return model_builder.build_model_only(
+        features, self.model_name, is_training)
 
   def build_model(self, features, is_training):
     """Build model with input features."""
